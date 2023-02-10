@@ -10,11 +10,13 @@ public class Pipe extends Actor {
     Rectangle bounds;
     boolean upsideDown;
     AssetManager manager;
+    boolean scoreAdded;
 
     Pipe(){
         setSize(64, 230);
         bounds = new Rectangle();
         setVisible(false);
+        scoreAdded=false;
     }
 
     @Override

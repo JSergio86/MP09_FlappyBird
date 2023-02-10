@@ -41,22 +41,33 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         boolean dead = false;
+
         // clear the screen with a color
+
         ScreenUtils.clear(0.3f, 0.8f, 0.8f, 1);
         // tell the camera to update its matrices.
         camera.update();
+
         // tell the SpriteBatch to render in the
         // coordinate system specified by the camera.
         game.batch.setProjectionMatrix(camera.combined);
+
         // begin a new batch
         game.batch.begin();
         game.batch.draw(game.manager.get("background.png", Texture.class), 0,
                 0);
         game.batch.end();
-        // Stage batch: Actors
 
+        // Stage batch: Actors
         stage.getBatch().setProjectionMatrix(camera.combined);
         stage.draw();
+
+        //HUD
+        game.batch.begin();
+        game.smallFont.draw(game.batch, "Score: " + (int)score, 10, 470);
+        game.batch.end();
+
+
         if (Gdx.input.justTouched()) {
             game.manager.get("flap.wav", Sound.class).play();
             player.impulso();
@@ -70,16 +81,13 @@ public class GameScreen implements Screen {
         if (player.getBounds().y < 0 - 45) {
             dead = true;
         }
-        game.batch.begin();
-        game.smallFont.draw(game.batch, "Score: " + (int)score, 10, 470);
-        game.batch.end();
 
-        //La puntuació augmenta amb el temps de joc
-        score += Gdx.graphics.getDeltaTime();
+
 
         // Comprova si cal generar un obstacle nou
         if (TimeUtils.nanoTime() - lastObstacleTime > 1500000000)
             spawnObstacle();
+
         // Comprova si les tuberies colisionen amb el jugador
         Iterator<Pipe> iter = obstacles.iterator();
         while (iter.hasNext()) {
@@ -88,10 +96,17 @@ public class GameScreen implements Screen {
                 dead = true;
             }
         }
+
         // Treure de l'array les tuberies que estan fora de pantalla
         iter = obstacles.iterator();
         while (iter.hasNext()) {
             Pipe pipe = iter.next();
+            if(player.getX() > pipe.getX() && pipe.upsideDown && pipe.scoreAdded == false ){
+                //La puntuació augmenta amb el temps de joc
+                score += 1;
+                pipe.scoreAdded=true;
+            }
+
             if (pipe.getX() < -64) {
                 obstacles.removeValue(pipe, true);
             }
