@@ -13,7 +13,7 @@ public class Pipe extends Actor {
     boolean scoreAdded;
 
     Pipe(){
-        setSize(64, 230);
+        setSize(58, 84);
         bounds = new Rectangle();
         setVisible(false);
         scoreAdded=false;
@@ -32,7 +32,7 @@ public class Pipe extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw( manager.get( upsideDown ? "pipe_up.png" : "pipe_down.png", Texture.class), getX(), getY() );
+        batch.draw( manager.get( "obstaculo.png", Texture.class), getX(), getY() );
     }
 
     public Rectangle getBounds() {

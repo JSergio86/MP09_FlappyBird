@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.Iterator;
 
@@ -22,6 +23,7 @@ public class GameScreen implements Screen {
     Array<Pipe> obstacles;
     long lastObstacleTime;
     float score;
+    int nivel;
 
     public GameScreen(final Bird gam) {
         this.game = gam;
@@ -37,6 +39,7 @@ public class GameScreen implements Screen {
         obstacles = new Array<Pipe>();
         spawnObstacle();
         score = 0;
+        nivel=1;
     }
     @Override
     public void render(float delta) {
@@ -67,7 +70,6 @@ public class GameScreen implements Screen {
         game.smallFont.draw(game.batch, "Score: " + (int)score, 10, 470);
         game.batch.end();
 
-
         if (Gdx.input.justTouched()) {
             game.manager.get("flap.wav", Sound.class).play();
             player.impulso();
@@ -81,8 +83,6 @@ public class GameScreen implements Screen {
         if (player.getBounds().y < 0 - 45) {
             dead = true;
         }
-
-
 
         // Comprova si cal generar un obstacle nou
         if (TimeUtils.nanoTime() - lastObstacleTime > 1500000000)
@@ -104,6 +104,7 @@ public class GameScreen implements Screen {
             if(player.getX() > pipe.getX() && pipe.upsideDown && pipe.scoreAdded == false ){
                 //La puntuació augmenta amb el temps de joc
                 score += 1;
+                nivel++;
                 pipe.scoreAdded=true;
             }
 
@@ -111,7 +112,6 @@ public class GameScreen implements Screen {
                 obstacles.removeValue(pipe, true);
             }
         }
-
 
         if(dead) {
             game.manager.get("fail.wav", Sound.class).play();
@@ -121,18 +121,23 @@ public class GameScreen implements Screen {
             game.setScreen(new GameOverScreen(game));
             dispose();
         }
+
     }
+
     private void spawnObstacle() {
         // Calcula la alçada de l'obstacle aleatòriament
-        float holey = MathUtils.random(50, 230);
+        float holey = MathUtils.random(100, 479);
         // Crea dos obstacles: Una tubería superior i una inferior
+
         Pipe pipe1 = new Pipe();
         pipe1.setX(800);
-        pipe1.setY(holey - 230);
+        pipe1.setY(holey);
         pipe1.setUpsideDown(true);
         pipe1.setManager(game.manager);
         obstacles.add(pipe1);
         stage.addActor(pipe1);
+
+        /*
         Pipe pipe2 = new Pipe();
         pipe2.setX(800);
         pipe2.setY(holey + 200);
@@ -140,8 +145,12 @@ public class GameScreen implements Screen {
         pipe2.setManager(game.manager);
         obstacles.add(pipe2);
         stage.addActor(pipe2);
+         */
         lastObstacleTime = TimeUtils.nanoTime();
+
     }
+
+
     @Override
     public void resize(int width, int height) {
     }

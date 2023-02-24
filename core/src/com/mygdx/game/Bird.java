@@ -18,11 +18,13 @@ public class Bird extends Game {
     int lastScore;
 
     public void create() {
-
         manager = new AssetManager();
-        manager.load("bird.png", Texture.class);
+        manager.load("coche.png", Texture.class);
         manager.load("pipe_up.png", Texture.class);
         manager.load("pipe_down.png", Texture.class);
+        manager.load("coche_amarillo.png", Texture.class);
+        manager.load("obstaculo.png", Texture.class);
+
         manager.load("background.png", Texture.class);
         manager.load("flap.wav", Sound.class);
         manager.load("fail.wav", Sound.class);
@@ -45,11 +47,12 @@ public class Bird extends Game {
         topScore = 0;
         lastScore = 0;
 
-
     }
+
     public void render() {
         super.render(); // important!
     }
+
     public void dispose() {
     }
 }

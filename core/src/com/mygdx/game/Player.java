@@ -32,7 +32,7 @@ public class Player extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(manager.get("bird.png", Texture.class),
+        batch.draw(manager.get("coche.png", Texture.class),
                 getX(), getY());
     }
 
